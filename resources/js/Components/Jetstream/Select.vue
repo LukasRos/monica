@@ -5,7 +5,7 @@ export default {
 </script>
 
 <script setup>
-import { computed, onMounted, onUnmounted, ref, useAttrs } from 'vue';
+import { computed, onMounted, onUnmounted, ref, useAttrs, useTemplateRef } from 'vue';
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -34,12 +34,12 @@ const props = defineProps({
   },
   inputClasses: {
     type: Array,
-    default: () => ['p-1', 'px-2', 'appearance-none', 'outline-none', 'w-full', 'dark:bg-gray-900'],
+    default: () => ['p-1', 'px-2', 'appearance-none', 'outline-hidden', 'w-full', 'dark:bg-gray-900'],
   },
 });
 
 const main = ref(null);
-const select = ref(null);
+const select = useTemplateRef('select');
 const open = ref(false);
 
 const proxySelect = computed({
@@ -120,7 +120,7 @@ const alignmentClasses = computed(() => {
 <template>
   <div ref="main" class="relative" :class="$attrs.class">
     <div
-      class="flex rounded-md border border-gray-300 p-1 shadow-sm focus-within:border-indigo-300 focus-within:ring focus-within:ring-indigo-200 focus-within:ring-opacity-50 dark:border-gray-600 dark:shadow-gray-700">
+      class="flex rounded-md border border-gray-300 p-1 shadow-xs focus-within:border-indigo-300 focus-within:ring-3 focus-within:ring-indigo-200/50 dark:border-gray-600 dark:shadow-gray-700">
       <input
         v-model="proxySelect"
         :id="$attrs.id"
@@ -134,7 +134,7 @@ const alignmentClasses = computed(() => {
             proxySelect = '';
             close();
           "
-          class="flex h-full w-6 cursor-pointer items-center text-gray-400 outline-none focus:outline-none dark:text-gray-600">
+          class="flex h-full w-6 cursor-pointer items-center text-gray-400 outline-hidden focus:outline-hidden dark:text-gray-600">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="100%"
@@ -159,7 +159,7 @@ const alignmentClasses = computed(() => {
               select.focus();
             }
           "
-          class="h-6 w-6 cursor-pointer text-gray-600 outline-none focus:outline-none dark:text-gray-300">
+          class="h-6 w-6 cursor-pointer text-gray-600 outline-hidden focus:outline-hidden dark:text-gray-300">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="100%"
@@ -192,7 +192,7 @@ const alignmentClasses = computed(() => {
         v-show="open"
         class="absolute z-50 mt-2 overflow-auto rounded-md shadow-lg dark:shadow-gray-700"
         :class="[widthClass, heightClass, alignmentClasses]">
-        <div class="rounded-md ring-1 ring-black ring-opacity-5" :class="contentClasses">
+        <div class="rounded-md ring-1 ring-black/5" :class="contentClasses">
           <div
             v-for="option in filtered"
             :key="option.id"
@@ -202,7 +202,7 @@ const alignmentClasses = computed(() => {
               close();
             ">
             <div
-              class="relative flex w-full items-center border-s-2 border-transparent bg-white p-2 ps-2 hover:border-teal-600 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 hover:dark:border-teal-400 hover:dark:bg-teal-400 hover:dark:text-teal-900">
+              class="relative flex w-full items-center border-s-2 border-transparent bg-white p-2 ps-2 hover:border-teal-600 hover:bg-teal-600 hover:text-teal-100 dark:bg-gray-800 dark:hover:border-teal-400 dark:hover:bg-teal-400 dark:hover:text-teal-900">
               <div class="flex w-full items-center">
                 <div class="mx-2 leading-6">
                   {{ option.name }}

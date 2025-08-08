@@ -6,7 +6,9 @@ use App\Domains\Contact\ManageLifeEvents\Web\ViewHelpers\ModuleLifeEventViewHelp
 use App\Domains\Vault\ManageLifeMetrics\Web\ViewHelpers\VaultLifeMetricsViewHelper;
 use App\Domains\Vault\ManageVault\Services\CreateVault;
 use App\Domains\Vault\ManageVault\Services\DestroyVault;
+use App\Domains\Vault\ManageVault\Services\UpdateVault;
 use App\Domains\Vault\ManageVault\Web\ViewHelpers\VaultCreateViewHelper;
+use App\Domains\Vault\ManageVault\Web\ViewHelpers\VaultEditViewHelper;
 use App\Domains\Vault\ManageVault\Web\ViewHelpers\VaultIndexViewHelper;
 use App\Domains\Vault\ManageVault\Web\ViewHelpers\VaultShowViewHelper;
 use App\Http\Controllers\Controller;
@@ -54,7 +56,7 @@ class VaultController extends Controller
             'description' => $request->input('description'),
         ];
 
-        (new CreateVault())->execute($data);
+        (new CreateVault)->execute($data);
 
         return response()->json([
             'data' => route('vault.index'),
@@ -86,6 +88,33 @@ class VaultController extends Controller
         ]);
     }
 
+    public function edit(Vault $vault)
+    {
+        return Inertia::render('Vault/Edit', [
+            'layoutData' => VaultIndexViewHelper::layoutData(),
+            'data' => VaultEditViewHelper::data($vault),
+        ]);
+    }
+
+    public function update(Request $request, Vault $vault)
+    {
+        $data = [
+            'account_id' => Auth::user()->account_id,
+            'author_id' => Auth::id(),
+            'vault_id' => $vault->id,
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+        ];
+
+        (new UpdateVault)->execute($data);
+
+        return response()->json([
+            'data' => route('vault.show', [
+                'vault' => $vault,
+            ]),
+        ], 200);
+    }
+
     public function destroy(Request $request, Vault $vault)
     {
         $data = [
@@ -94,7 +123,7 @@ class VaultController extends Controller
             'vault_id' => $vault->id,
         ];
 
-        (new DestroyVault())->execute($data);
+        (new DestroyVault)->execute($data);
 
         return response()->json([
             'data' => route('vault.index'),

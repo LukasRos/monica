@@ -28,10 +28,11 @@ class PersonalizeContatInformationTypesController extends Controller
             'account_id' => Auth::user()->account_id,
             'author_id' => Auth::id(),
             'name' => $request->input('name'),
+            'type' => $request->input('type'),
             'protocol' => $request->input('protocol'),
         ];
 
-        $contactInformationType = (new CreateContactInformationType())->execute($data);
+        $contactInformationType = (new CreateContactInformationType)->execute($data);
 
         return response()->json([
             'data' => PersonalizeContactInformationTypeIndexViewHelper::dtoContactInformationType($contactInformationType),
@@ -45,10 +46,11 @@ class PersonalizeContatInformationTypesController extends Controller
             'author_id' => Auth::id(),
             'contact_information_type_id' => $contactInformationTypeId,
             'name' => $request->input('name'),
+            'type' => $request->input('type'),
             'protocol' => $request->input('protocol'),
         ];
 
-        $contactInformationType = (new UpdateContactInformationType())->execute($data);
+        $contactInformationType = (new UpdateContactInformationType)->execute($data);
 
         return response()->json([
             'data' => PersonalizeContactInformationTypeIndexViewHelper::dtoContactInformationType($contactInformationType),
@@ -63,7 +65,7 @@ class PersonalizeContatInformationTypesController extends Controller
             'contact_information_type_id' => $contactInformationTypeId,
         ];
 
-        (new DestroyContactInformationType())->execute($data);
+        (new DestroyContactInformationType)->execute($data);
 
         return response()->json([
             'data' => true,

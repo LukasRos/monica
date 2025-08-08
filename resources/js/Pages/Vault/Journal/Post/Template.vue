@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 
 defineProps({
@@ -64,7 +64,7 @@ defineProps({
           <li
             v-for="template in data.templates"
             :key="template.id"
-            class="template-list border-b border-gray-200 px-3 py-2 hover:bg-slate-50 dark:border-gray-800 hover:dark:bg-slate-900">
+            class="template-list border-b border-gray-200 px-3 py-2 hover:bg-slate-50 dark:border-gray-800 dark:hover:bg-slate-900">
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-semibold">{{ template.label }}</p>

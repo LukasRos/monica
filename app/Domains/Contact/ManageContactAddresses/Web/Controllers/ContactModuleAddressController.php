@@ -33,13 +33,13 @@ class ContactModuleAddressController extends Controller
         ];
 
         if (! $request->input('existing_address')) {
-            $address = (new CreateAddress())->execute($data);
+            $address = (new CreateAddress)->execute($data);
         } else {
             $address = Address::where('vault_id', $vaultId)
                 ->findOrFail($request->input('existing_address_id'));
         }
 
-        (new AssociateAddressToContact())->execute([
+        (new AssociateAddressToContact)->execute([
             'account_id' => Auth::user()->account_id,
             'vault_id' => $vaultId,
             'author_id' => Auth::id(),
@@ -73,11 +73,11 @@ class ContactModuleAddressController extends Controller
             'longitude' => null,
         ];
 
-        (new UpdateAddress())->execute($data);
+        (new UpdateAddress)->execute($data);
         $contact = Contact::find($contactId);
 
         // update pivot table
-        $contact->addresses()->where('address_id', $addressId)->update([
+        $contact->addresses()->updateExistingPivot($addressId, [
             'is_past_address' => $request->input('is_past_address'),
         ]);
 
@@ -99,7 +99,7 @@ class ContactModuleAddressController extends Controller
             'address_id' => $addressId,
         ];
 
-        (new RemoveAddressFromContact())->execute($data);
+        (new RemoveAddressFromContact)->execute($data);
 
         return response()->json([
             'data' => true,

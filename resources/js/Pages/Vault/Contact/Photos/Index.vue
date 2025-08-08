@@ -99,7 +99,7 @@
             <div
               v-for="photo in localPhotos"
               :key="photo.id"
-              class="rounded-md border border-gray-200 p-2 shadow-sm hover:bg-slate-50 hover:shadow-lg dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+              class="rounded-md border border-gray-200 p-2 shadow-xs hover:bg-slate-50 hover:shadow-lg dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
               <InertiaLink :href="photo.url.show">
                 <img :src="photo.url.display" :alt="photo.name" />
               </InertiaLink>
@@ -124,7 +124,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import Pagination from '@/Components/Pagination.vue';
 import Uploadcare from '@/Components/Uploadcare.vue';

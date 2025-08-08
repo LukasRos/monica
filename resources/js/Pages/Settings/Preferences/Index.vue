@@ -1,7 +1,7 @@
 <template>
   <layout :layout-data="layoutData">
     <!-- breadcrumb -->
-    <nav class="bg-white dark:bg-gray-900 sm:border-b">
+    <nav class="bg-white dark:bg-gray-900 sm:border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-8xl mx-auto hidden px-4 py-2 sm:px-6 md:block">
         <div class="flex items-baseline justify-between space-x-6">
           <ul class="text-sm">
@@ -55,7 +55,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import NameOrder from '@/Pages/Settings/Preferences/Partials/NameOrder.vue';
 import DateFormat from '@/Pages/Settings/Preferences/Partials/DateFormat.vue';
 import NumberFormat from '@/Pages/Settings/Preferences/Partials/NumberFormat.vue';

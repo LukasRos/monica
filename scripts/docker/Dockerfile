@@ -7,7 +7,7 @@
 ###
 
 ## Build assets
-FROM node:18 AS yarn
+FROM node:22 AS yarn
 
 WORKDIR /var/www/html
 COPY . ./
@@ -18,7 +18,7 @@ RUN set -ex; \
 
 
 ## Image
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 # entrypoint.sh dependencies
 RUN set -ex; \
@@ -145,7 +145,7 @@ RUN set -ex; \
     a2enconf remoteip
 
 # set apache config LimitRequestBody
-ENV APACHE_BODY_LIMIT 1073741824
+ENV APACHE_BODY_LIMIT=1073741824
 RUN set -ex; \
     \
     { \

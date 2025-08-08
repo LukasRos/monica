@@ -1,7 +1,7 @@
 <script setup>
 import { router, useForm, Link } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 import Avatar from '@/Shared/Avatar.vue';
 import Pagination from '@/Components/Pagination.vue';
@@ -26,7 +26,7 @@ const update = () => {
 </script>
 
 <template>
-  <layout :layout-data="layoutData" :inside-vault="true">
+  <layout :title="$t('Contacts')" :layout-data="layoutData" :inside-vault="true">
     <main class="relative sm:mt-24">
       <div class="mx-auto max-w-6xl px-2 py-2 sm:px-6 sm:py-6 lg:px-8">
         <div class="special-grid grid grid-cols-1 gap-6 sm:grid-cols-3">
@@ -34,10 +34,7 @@ const update = () => {
           <div>
             <!-- labels -->
             <div class="mb-8">
-              <div class="mb-3 border-b border-gray-200 dark:border-gray-700">
-                <span class="me-1"> 🏷️ </span>
-                {{ $t('Labels') }}
-              </div>
+              <div class="mb-3 border-b border-gray-200 dark:border-gray-700">{{ $t('Labels') }}</div>
               <ul v-if="data.labels.length > 0">
                 <li class="mb-1">
                   <div v-if="data.current_label">
@@ -72,10 +69,7 @@ const update = () => {
           <div class="p-3 sm:px-3 sm:py-0">
             <!-- title + cta -->
             <div class="mb-3 flex items-center justify-between">
-              <h3>
-                <span class="me-1"> 🥸 </span>
-                {{ $t('All contacts in the vault') }}
-              </h3>
+              <h3>{{ $t('All contacts in the vault') }}</h3>
 
               <div class="flex items-center">
                 <dropdown
@@ -100,7 +94,7 @@ const update = () => {
               <li
                 v-for="contact in data.contacts"
                 :key="contact.id"
-                class="flex items-center border-b border-gray-200 px-5 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+                class="flex items-center border-b border-gray-200 px-5 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
                 <avatar :data="contact.avatar" :class="'me-2 h-5 w-5 rounded-full'" />
 
                 <Link :href="contact.url.show" class="text-blue-500 hover:underline">

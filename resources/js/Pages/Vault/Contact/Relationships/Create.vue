@@ -63,7 +63,7 @@
               id="types"
               v-model="form.relationship_type_id"
               name="types"
-              class="w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-sm focus:border-indigo-300 focus:outline-none focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:bg-gray-900 sm:text-sm"
+              class="w-full rounded-md border-gray-300 bg-white px-3 py-2 shadow-xs focus:border-indigo-300 focus:outline-hidden focus:ring-3 focus:ring-indigo-200/50 dark:bg-gray-900 sm:text-sm"
               @update:model-value="load"
               :data="fromRelationshipOptions" />
           </div>
@@ -120,7 +120,8 @@
                       value="unknown"
                       name="name-order"
                       type="radio"
-                      class="h-4 w-4 border-gray-300 text-sky-500 dark:border-gray-700" />
+                      class="h-4 w-4 border-gray-300 text-sky-500 dark:border-gray-700"
+                      @click="hideContactNameField" />
                     <label
                       for="unknown"
                       class="ms-3 block cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -203,7 +204,7 @@
                       name="name-order"
                       type="radio"
                       class="h-4 w-4 border-gray-300 text-sky-500 dark:border-gray-700"
-                      @click="displayContactSelector" />
+                      @input="displayContactSelector" />
                     <label
                       for="contact"
                       class="ms-3 block cursor-pointer text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -306,7 +307,7 @@
                   v-model="form.create_contact_entry"
                   name="create-contact"
                   type="checkbox"
-                  class="focus:ring-3 relative h-4 w-4 rounded border border-gray-300 bg-gray-50 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 focus:dark:ring-blue-600" />
+                  class="focus:ring-3 relative h-4 w-4 rounded-xs border border-gray-300 bg-gray-50 focus:ring-blue-300 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600" />
                 <label for="create-contact" class="ms-2 block cursor-pointer text-sm text-gray-900 dark:text-white">
                   {{ $t('Create a contact entry for this person') }}
                 </label>
@@ -332,7 +333,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import TextInput from '@/Shared/Form/TextInput.vue';
@@ -428,6 +429,19 @@ export default {
       this.$nextTick().then(() => {
         this.$refs.contactName.focus();
       });
+    },
+
+    hideContactNameField() {
+      this.form.choice = 'unknown';
+      this.form.first_name = '';
+      this.form.last_name = '';
+      this.form.middle_name = '';
+      this.form.nickname = '';
+      this.form.maiden_name = '';
+      this.form.gender_id = '';
+      this.form.pronoun_id = '';
+      this.showContactName = false;
+      this.showMoreContactOptions = false;
     },
 
     displayContactSelector() {

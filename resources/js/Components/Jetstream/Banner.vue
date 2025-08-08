@@ -1,12 +1,15 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
+const page = usePage();
 const show = ref(true);
-const style = computed(() => usePage().props.jetstream.flash?.bannerStyle || 'success');
-const message = computed(() => usePage().props.jetstream.flash?.banner || '');
+const style = ref('success');
+const message = ref('');
 
-watch(message, async () => {
+watchEffect(async () => {
+  style.value = page.props.jetstream.flash?.bannerStyle || 'success';
+  message.value = page.props.jetstream.flash?.banner || '';
   show.value = true;
 });
 </script>
@@ -14,7 +17,7 @@ watch(message, async () => {
 <template>
   <div>
     <div v-if="show && message" :class="{ 'bg-indigo-500': style === 'success', 'bg-red-700': style === 'danger' }">
-      <div class="mx-auto max-w-screen-xl px-3 py-2 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-(--breakpoint-xl) px-3 py-2 sm:px-6 lg:px-8">
         <div class="flex flex-wrap items-center justify-between">
           <div class="flex w-0 min-w-0 flex-1 items-center">
             <span
@@ -57,7 +60,7 @@ watch(message, async () => {
           <div class="shrink-0 sm:ms-3">
             <button
               type="button"
-              class="-me-1 flex rounded-md p-2 transition focus:outline-none sm:-me-2"
+              class="-me-1 flex rounded-md p-2 transition focus:outline-hidden sm:-me-2"
               :class="{
                 'hover:bg-indigo-600 focus:bg-indigo-600': style === 'success',
                 'hover:bg-red-600 focus:bg-red-600': style === 'danger',

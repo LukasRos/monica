@@ -55,7 +55,7 @@ class VaultShowViewHelper
         $remindersCollection = $contactRemindersScheduled->map(function ($reminder) use ($vault, $user) {
             $contact = $reminder->contact;
 
-            if ($contact->vault_id !== $vault->id) {
+            if ($contact->vault_id != $vault->id) {
                 return null;
             }
 
@@ -82,6 +82,9 @@ class VaultShowViewHelper
         // this line removes the null values that are added when the contact
         // is not in the vault (in the method above)
         $remindersCollection = $remindersCollection->filter(fn ($value) => $value != null);
+
+        // Filter out duplicate reminders going to each notification channel based on contact_reminder_id
+        $remindersCollection = $remindersCollection->unique(fn ($reminder) => $reminder['id']);
 
         return [
             'reminders' => $remindersCollection,

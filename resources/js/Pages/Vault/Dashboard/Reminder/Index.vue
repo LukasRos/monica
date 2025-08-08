@@ -82,7 +82,7 @@
             <li
               v-for="reminder in month.reminders"
               :key="reminder.id"
-              class="item-list border-b border-gray-200 px-3 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+              class="item-list border-b border-gray-200 px-3 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
               <div class="items-center sm:flex">
                 <p class="me-3 text-gray-400">
                   {{ reminder.scheduled_at }}
@@ -114,7 +114,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import Avatar from '@/Shared/Avatar.vue';
 
 export default {

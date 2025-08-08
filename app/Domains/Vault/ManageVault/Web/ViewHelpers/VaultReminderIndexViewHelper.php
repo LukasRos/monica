@@ -58,7 +58,7 @@ class VaultReminderIndexViewHelper
                 $reminder = ContactReminder::where('id', $contactReminderScheduled->contact_reminder_id)->with('contact')->first();
                 $contact = $reminder->contact;
 
-                if ($contact->vault_id !== $vault->id) {
+                if ($contact->vault_id != $vault->id) {
                     continue;
                 }
 
@@ -79,6 +79,9 @@ class VaultReminderIndexViewHelper
                     ],
                 ]);
             }
+
+            // Filter out duplicate reminders going to each notification channel based on contact_reminder_id
+            $remindersCollection = $remindersCollection->unique(fn ($reminder) => $reminder['id']);
 
             $monthsReminderCollection->push([
                 'id' => $month,

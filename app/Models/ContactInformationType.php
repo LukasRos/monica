@@ -14,7 +14,7 @@ class ContactInformationType extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int,string>
+     * @var list<string>
      */
     protected $fillable = [
         'account_id',
@@ -35,6 +35,8 @@ class ContactInformationType extends Model
 
     /**
      * Get the account associated with the contact information type.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Account, $this>
      */
     public function account(): BelongsTo
     {
@@ -42,7 +44,7 @@ class ContactInformationType extends Model
     }
 
     /**
-     * Get the name of the reverse relationship attribute.
+     * Get the name of the Contact information type attribute.
      * Contact information type entries have a default name that can be translated.
      * Howerer, if a name is set, it will be used instead of the default.
      *
@@ -52,7 +54,7 @@ class ContactInformationType extends Model
     {
         return Attribute::make(
             get: function ($value, $attributes) {
-                if (! $value) {
+                if ($value === null || $value == '') {
                     return __($attributes['name_translation_key']);
                 }
 

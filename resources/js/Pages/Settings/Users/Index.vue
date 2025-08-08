@@ -1,7 +1,7 @@
 <template>
   <layout title="Dashboard" :layout-data="layoutData">
     <!-- breadcrumb -->
-    <nav class="bg-white dark:bg-gray-900 sm:border-b">
+    <nav class="bg-white dark:bg-gray-900 sm:border-b border-gray-200 dark:border-gray-700">
       <div class="max-w-8xl mx-auto hidden px-4 py-2 sm:px-6 md:block">
         <div class="flex items-baseline justify-between space-x-6">
           <ul class="text-sm">
@@ -47,7 +47,7 @@
           <li
             v-for="user in data.users"
             :key="user.id"
-            class="border-b border-gray-200 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+            class="border-b border-gray-200 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
             <!-- case: user has been invited -->
             <div v-if="!user.name" class="flex items-center justify-between px-5 py-2">
               <div>
@@ -58,7 +58,7 @@
                   <!-- is administrator -->
                   <span
                     v-if="user.is_account_administrator"
-                    class="ms-2 rounded bg-neutral-200 px-2 py-1 text-xs text-neutral-500"
+                    class="ms-2 rounded-xs bg-neutral-200 px-2 py-1 text-xs text-neutral-500"
                     >{{ $t('Administrator') }}</span
                   >
                 </span>
@@ -91,7 +91,7 @@
                   <!-- is administrator -->
                   <span
                     v-if="user.is_account_administrator"
-                    class="ms-2 rounded bg-neutral-200 px-2 py-1 text-xs text-neutral-500"
+                    class="ms-2 rounded-xs bg-neutral-200 px-2 py-1 text-xs text-neutral-500"
                     >{{ $t('Administrator') }}</span
                   >
                 </span>
@@ -171,7 +171,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import PrettySpan from '@/Shared/Form/PrettySpan.vue';

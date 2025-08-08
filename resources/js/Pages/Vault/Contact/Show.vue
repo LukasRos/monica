@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import { Link, router, useForm } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
 import { flash } from '@/methods.js';
@@ -8,7 +8,7 @@ import JetConfirmationModal from '@/Components/Jetstream/ConfirmationModal.vue';
 import JetButton from '@/Components/Button.vue';
 import JetDangerButton from '@/Components/Jetstream/DangerButton.vue';
 import JetSecondaryButton from '@/Components/Jetstream/SecondaryButton.vue';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import ContactName from '@/Shared/Modules/ContactName.vue';
 import ContactAvatar from '@/Shared/Modules/ContactAvatar.vue';
 import GenderPronoun from '@/Shared/Modules/GenderPronoun.vue';
@@ -35,6 +35,7 @@ import Posts from '@/Shared/Modules/Posts.vue';
 import LifeEvent from '@/Shared/Modules/LifeEvent.vue';
 import QuickFacts from '@/Shared/Modules/QuickFacts.vue';
 import Uploadcare from '@/Components/Uploadcare.vue';
+import { ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps({
   layoutData: Object,
@@ -151,42 +152,46 @@ const download = () => {
     },
   });
 };
+
+const selectedOption = ref('');
+
+onMounted(() => {
+  const selectedPage = Object.values(props.data.template_pages).find((page) => page.selected);
+  if (selectedPage) {
+    selectedOption.value = selectedPage.url.show;
+  }
+});
+
+const navigateToSelected = () => {
+  router.visit(selectedOption.value);
+};
 </script>
 
 <template>
-  <Layout :layout-data="layoutData" :inside-vault="true">
+  <Layout :title="data.contact_name.name" :layout-data="layoutData" :inside-vault="true">
     <!-- breadcrumb -->
-    <nav class="bg-white dark:bg-gray-900 sm:mt-20 sm:border-b">
+    <nav class="bg-white dark:bg-gray-900 sm:mt-20 sm:border-b sm:border-gray-300 dark:border-gray-700">
       <div class="max-w-8xl mx-auto hidden px-4 py-2 sm:px-6 md:block">
-        <div class="flex items-baseline justify-between space-x-6">
-          <ul class="text-sm">
-            <li class="me-2 inline text-gray-600 dark:text-gray-400">
-              {{ $t('You are here:') }}
-            </li>
-            <li class="me-2 inline">
-              <Link :href="layoutData.vault.url.contacts" class="text-blue-500 hover:underline">
-                {{ $t('Contacts') }}
-              </Link>
-            </li>
-            <li class="relative me-2 inline">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="icon-breadcrumb relative inline h-3 w-3"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </li>
-            <li class="inline">
-              {{ $t('Profile of :name', { name: data.contact_name.name }) }}
-            </li>
-          </ul>
+        <div class="flex items-center gap-1 text-sm">
+          <div class="text-gray-600 dark:text-gray-400">
+            {{ $t('You are here:') }}
+          </div>
+          <div class="inline">
+            <Link :href="layoutData.vault.url.contacts" class="text-blue-500 hover:underline">
+              {{ $t('Contacts') }}
+            </Link>
+          </div>
+          <div class="relative inline">
+            <ChevronRight class="h-3 w-3" />
+          </div>
+          <div class="inline">
+            {{ $t('Profile of :name', { name: data.contact_name.name }) }}
+          </div>
         </div>
       </div>
     </nav>
 
-    <main class="sm:mt-18 relative">
+    <main class="sm:mt-8 relative">
       <div class="mx-auto max-w-6xl px-2 py-2 sm:px-6 sm:py-6 lg:px-8">
         <!-- banner if contact is archived -->
         <!-- this is based on the `listed` boolean on the contact object -->
@@ -288,7 +293,7 @@ const download = () => {
 
             <!-- family summary -->
             <div v-if="data.group_summary_information.length > 0">
-              <div class="mb-6 flex rounded border border-gray-200 p-3 dark:border-gray-700">
+              <div class="mb-6 flex rounded-xs border border-gray-200 p-3 dark:border-gray-700">
                 <img src="/img/group.svg" class="me-2 h-6 w-6" />
                 <ul>
                   <li class="me-2 inline">{{ $t('Part of') }}</li>
@@ -304,8 +309,8 @@ const download = () => {
               </div>
             </div>
 
-            <!-- all the pages -->
-            <div class="mb-8 w-full border-b border-gray-200 dark:border-gray-700">
+            <!-- page selector on desktop -->
+            <div class="hidden md:block mb-8 w-full border-b border-gray-200 dark:border-gray-700">
               <div class="flex overflow-x-hidden">
                 <div v-for="page in data.template_pages" :key="page.id" class="me-2 flex-none">
                   <Link
@@ -313,15 +318,28 @@ const download = () => {
                     :class="
                       page.selected
                         ? 'border-orange-500 hover:border-orange-500'
-                        : 'border-transparent hover:border-gray-200 hover:dark:border-gray-700'
+                        : 'border-transparent hover:border-gray-200 dark:hover:border-gray-700'
                     "
                     class="inline-block border-b-2 px-2 pb-2">
-                    <span class="mb-0 block rounded-sm px-3 py-1 hover:bg-gray-100 hover:dark:bg-gray-900">
+                    <span class="mb-0 block rounded-xs px-3 py-1 hover:bg-gray-100 dark:hover:bg-gray-900">
                       {{ page.name }}
                     </span>
                   </Link>
                 </div>
               </div>
+            </div>
+
+            <!-- page selector on mobile -->
+            <div class="md:hidden mb-8 w-full">
+              <p class="text-sm mb-2">{{ $t('Select a page') }}</p>
+              <select
+                v-model="selectedOption"
+                @change="navigateToSelected"
+                class="w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-blue-500 focus:outline-hidden focus:ring-blue-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                <option v-for="page in data.template_pages" :key="page.id" :value="page.url.show">
+                  {{ page.name }}
+                </option>
+              </select>
             </div>
 
             <!-- all the modules -->

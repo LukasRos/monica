@@ -3,8 +3,8 @@
 namespace App\Actions\Jetstream;
 
 use App\Domains\Vault\ManageVault\Web\ViewHelpers\VaultIndexViewHelper;
+use App\Models\WebauthnKey;
 use Illuminate\Http\Request;
-use LaravelWebauthn\Models\WebauthnKey;
 
 class UserProfile
 {
@@ -23,11 +23,11 @@ class UserProfile
             ]);
 
         $webauthnKeys = $request->user()->webauthnKeys
-            ->map(fn (WebauthnKey $key) => [
+            ->map(fn (WebauthnKey $key) => [ // @phpstan-ignore-line
                 'id' => $key->id,
                 'name' => $key->name,
                 'type' => $key->type,
-                'last_active' => $key->updated_at->diffForHumans(),
+                'last_used' => optional($key->used_at)->diffForHumans(),
             ])
             ->toArray();
 

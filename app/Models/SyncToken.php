@@ -12,16 +12,9 @@ class SyncToken extends Model
     protected $table = 'sync_tokens';
 
     /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array<string>|bool
-     */
-    protected $guarded = ['id'];
-
-    /**
      * The attributes that are mass assignable.
      *
-     * @var array<int,string>
+     * @var list<string>
      */
     protected $fillable = [
         'account_id',

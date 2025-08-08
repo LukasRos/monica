@@ -7,6 +7,7 @@ use App\Domains\Contact\ManageDocuments\Listeners\DeleteFileInStorage;
 use App\Helpers\CollectionHelper;
 use App\Http\Controllers\Profile\WebauthnDestroyResponse;
 use App\Http\Controllers\Profile\WebauthnUpdateResponse;
+use App\Models\User;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Schema\Builder;
@@ -15,9 +16,11 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Illuminate\Testing\TestResponse;
@@ -33,6 +36,8 @@ use SocialiteProviders\Azure\AzureExtendSocialite;
 use SocialiteProviders\Facebook\FacebookExtendSocialite;
 use SocialiteProviders\GitHub\GitHubExtendSocialite;
 use SocialiteProviders\Google\GoogleExtendSocialite;
+use SocialiteProviders\Kanidm\KanidmExtendSocialite;
+use SocialiteProviders\Keycloak\KeycloakExtendSocialite;
 use SocialiteProviders\LinkedIn\LinkedInExtendSocialite;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 use Tests\TestResponseMacros;
@@ -63,9 +68,9 @@ class AppServiceProvider extends ServiceProvider
                     ],
                 ];
                 $environment = new Environment($config);
-                $environment->addExtension(new CommonMarkCoreExtension());
-                $environment->addExtension(new GithubFlavoredMarkdownExtension());
-                $environment->addExtension(new ExternalLinkExtension());
+                $environment->addExtension(new CommonMarkCoreExtension);
+                $environment->addExtension(new GithubFlavoredMarkdownExtension);
+                $environment->addExtension(new ExternalLinkExtension);
 
                 $converter = new MarkdownConverter($environment);
 
@@ -80,7 +85,7 @@ class AppServiceProvider extends ServiceProvider
         if (! Http::hasMacro('getDnsRecord')) {
             Http::macro('getDnsRecord', function (string $hostname, int $type): ?Collection {
                 try {
-                    if (($entries = \Safe\dns_get_record($hostname, $type)) !== null) {
+                    if (($entries = \Safe\dns_get_record($hostname, $type)) != null) {
                         return collect($entries);
                     }
                 } catch (\Safe\Exceptions\NetworkException) {
@@ -110,6 +115,11 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Builder::defaultMorphKeyType('uuid');
+
+        if ($this->app->environment('local') && class_exists(\Laravel\Telescope\TelescopeServiceProvider::class)) {
+            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            $this->app->register(TelescopeServiceProvider::class);
+        }
     }
 
     /**
@@ -138,12 +148,8 @@ class AppServiceProvider extends ServiceProvider
                 : Password::min(4);
         });
 
-        RateLimiter::for('api', function (Request $request) {
-            return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
-        });
-        RateLimiter::for('oauth2-socialite', function (Request $request) {
-            return Limit::perMinute(5)->by(optional($request->user())->id ?: $request->ip());
-        });
+        RateLimiter::for('api', fn (Request $request) => Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip()));
+        RateLimiter::for('oauth2-socialite', fn (Request $request) => Limit::perMinute(5)->by(optional($request->user())->id ?: $request->ip()));
 
         Webauthn::updateViewResponseUsing(WebauthnUpdateResponse::class);
         Webauthn::destroyViewResponseUsing(WebauthnDestroyResponse::class);
@@ -155,5 +161,11 @@ class AppServiceProvider extends ServiceProvider
         Event::listen(SocialiteWasCalled::class, GitHubExtendSocialite::class);
         Event::listen(SocialiteWasCalled::class, GoogleExtendSocialite::class);
         Event::listen(SocialiteWasCalled::class, LinkedInExtendSocialite::class);
+        Event::listen(SocialiteWasCalled::class, KanidmExtendSocialite::class);
+        Event::listen(SocialiteWasCalled::class, KeycloakExtendSocialite::class);
+
+        Vite::prefetch(concurrency: 3);
+
+        Gate::define('viewPulse', fn (User $user) => $user->is_instance_administrator || $this->app->environment('local'));
     }
 }

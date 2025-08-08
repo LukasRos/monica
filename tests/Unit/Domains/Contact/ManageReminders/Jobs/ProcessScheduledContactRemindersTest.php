@@ -39,7 +39,7 @@ class ProcessScheduledContactRemindersTest extends TestCase
             'triggered_at' => null,
         ]);
 
-        $job = new ProcessScheduledContactReminders();
+        $job = new ProcessScheduledContactReminders;
         $job->dispatch();
         $job->handle();
 
@@ -72,7 +72,7 @@ class ProcessScheduledContactRemindersTest extends TestCase
             'triggered_at' => null,
         ]);
 
-        $job = new ProcessScheduledContactReminders();
+        $job = new ProcessScheduledContactReminders;
         $job->dispatch();
         $job->handle();
 
@@ -103,7 +103,7 @@ class ProcessScheduledContactRemindersTest extends TestCase
 
         $contactReminder->contact->delete();
 
-        $job = new ProcessScheduledContactReminders();
+        $job = new ProcessScheduledContactReminders;
         $job->dispatch();
         $job->handle();
 
@@ -125,6 +125,7 @@ class ProcessScheduledContactRemindersTest extends TestCase
             'type' => UserNotificationChannel::TYPE_TELEGRAM,
             'content' => '0',
             'fails' => 10,
+            'active' => false,
         ]);
         DB::table('contact_reminder_scheduled')->insertGetId([
             'user_notification_channel_id' => $channel->id,
@@ -133,7 +134,7 @@ class ProcessScheduledContactRemindersTest extends TestCase
             'triggered_at' => null,
         ]);
 
-        $job = new ProcessScheduledContactReminders();
+        $job = new ProcessScheduledContactReminders;
         $job->dispatch();
         $job->handle();
 

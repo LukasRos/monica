@@ -33,7 +33,7 @@ class ExportAddressTest extends TestCase
         $address = Address::factory()->create(['vault_id' => $vault->id]);
         $address->contacts()->attach($contact->id);
 
-        $vCard = new VCard();
+        $vCard = new VCard;
         (new ExportAddress)->export($contact, $vCard);
 
         $this->assertCount(
@@ -41,7 +41,7 @@ class ExportAddressTest extends TestCase
             $vCard->children()
         );
 
-        $text = "ADR;TYPE={$address->addressType->name}:;{$address->line_1};{$address->line_2};{$address->city};{$address->province};{$address->postal_code};{$address->country}";
+        $text = "ADR;TYPE={$address->addressType->type}:;{$address->line_1};{$address->line_2};{$address->city};{$address->province};{$address->postal_code};{$address->country}";
         $this->assertStringContainsString(Str::substr($text, 0, 75), $vCard->serialize());
         $this->assertStringContainsString(Str::substr($text, 75), $vCard->serialize());
     }

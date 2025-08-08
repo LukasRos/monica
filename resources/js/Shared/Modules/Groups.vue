@@ -2,21 +2,8 @@
   <div class="mb-10">
     <!-- title + cta -->
     <div class="mb-3 items-center justify-between border-b border-gray-200 pb-2 dark:border-gray-700 sm:flex">
-      <div class="mb-2 sm:mb-0">
-        <span class="relative me-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="icon-sidebar relative inline h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-          </svg>
-        </span>
+      <div class="mb-2 sm:mb-0 flex items-center gap-2">
+        <Handshake class="h-4 w-4 text-gray-600" />
 
         <span class="font-semibold"> {{ $t('Groups') }} </span>
       </div>
@@ -97,7 +84,7 @@
       <li
         v-for="group in filteredGroups"
         :key="group.id"
-        class="item-list flex items-center justify-between border-b border-gray-200 px-5 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+        class="item-list flex items-center justify-between border-b border-gray-200 px-5 py-2 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
         <div>
           <p class="font-semibold">{{ group.name }}</p>
 
@@ -113,7 +100,7 @@
         <!-- actions -->
         <ul class="text-sm">
           <li class="me-4 inline cursor-pointer">
-            <InertiaLink :href="group.url.show" class="text-blue-500 hover:underline">{{ $t('View') }}</InertiaLink>
+            <InertiaLink :href="group.url.show" class="text-blue-500 hover:underline">{{ $t('Show') }}</InertiaLink>
           </li>
           <li class="inline cursor-pointer text-red-500 hover:text-red-900" @click="destroy(group)">
             {{ $t('Leave') }}
@@ -140,6 +127,7 @@ import TextInput from '@/Shared/Form/TextInput.vue';
 import Dropdown from '@/Shared/Form/Dropdown.vue';
 import Errors from '@/Shared/Form/Errors.vue';
 import Avatar from '@/Shared/Avatar.vue';
+import { Handshake } from 'lucide-vue-next';
 
 export default {
   components: {
@@ -150,6 +138,7 @@ export default {
     Dropdown,
     Errors,
     Avatar,
+    Handshake,
   },
 
   props: {
