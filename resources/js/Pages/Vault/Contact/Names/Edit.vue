@@ -163,7 +163,7 @@
 
 <script>
 import { Link } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import TextInput from '@/Shared/Form/TextInput.vue';
@@ -229,7 +229,7 @@ export default {
       axios
         .post(this.data.url.update, this.form)
         .then((response) => {
-          localStorage.success = this.$t('The contact has been edited');
+          localStorage.success = this.$t('The contact has been updated');
           this.$inertia.visit(response.data.data);
         })
         .catch((error) => {

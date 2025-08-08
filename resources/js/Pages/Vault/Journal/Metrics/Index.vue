@@ -1,8 +1,8 @@
 <script setup>
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, useTemplateRef } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import { trans } from 'laravel-vue-i18n';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import PrettySpan from '@/Shared/Form/PrettySpan.vue';
 import TextInput from '@/Shared/Form/TextInput.vue';
@@ -15,7 +15,7 @@ const props = defineProps({
 
 const localMetrics = ref(props.data.journalMetrics);
 const loadingState = ref('');
-const newJournalMetric = ref(null);
+const newJournalMetric = useTemplateRef('newJournalMetric');
 const createJournalMetricModalShown = ref(false);
 
 const form = useForm({
@@ -152,7 +152,7 @@ const destroy = (metric) => {
             <li
               v-for="metric in localMetrics"
               :key="metric.id"
-              class="flex items-center justify-between border-b border-gray-200 px-5 py-4 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 hover:dark:bg-slate-800">
+              class="flex items-center justify-between border-b border-gray-200 px-5 py-4 hover:bg-slate-50 dark:border-gray-700 dark:bg-slate-900 dark:hover:bg-slate-800">
               <span>{{ metric.label }}</span>
 
               <!-- actions -->

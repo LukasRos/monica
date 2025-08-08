@@ -1,79 +1,43 @@
+<script setup>
+import PlusIcon from '@/Shared/Icons/PlusIcon.vue';
+import CheckedIcon from '@/Shared/Icons/CheckedIcon.vue';
+import MinusIcon from '@/Shared/Icons/MinusIcon.vue';
+import ArrowIcon from '@/Shared/Icons/ArrowIcon.vue';
+import { Trash2 } from 'lucide-vue-next';
+
+defineProps({
+  text: String,
+  icon: String,
+  state: String,
+});
+</script>
+
 <template>
   <button
-    :class="'dark:box-s relative border-zinc-900 bg-white text-sm dark:border-zinc-100 dark:bg-gray-800 dark:text-gray-100'"
+    :class="'dark:box-s relative border-zinc-900 bg-white text-sm dark:border-zinc-100 dark:bg-gray-800 dark:text-gray-100 flex'"
     :disabled="state === 'loading' || state === 'disabled'"
     type="submit">
-    <span v-if="state === 'loading'"> {{ $t('Loading…') }} </span>
-
-    <!-- + icon -->
-    <svg
-      v-if="icon === 'plus' && state !== 'loading'"
-      xmlns="http://www.w3.org/2000/svg"
-      class="icon relative me-1 inline h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-    </svg>
-
-    <!-- check icon -->
-    <svg
-      v-if="icon === 'check' && state !== 'loading'"
-      xmlns="http://www.w3.org/2000/svg"
-      class="icon relative me-1 inline h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-    </svg>
-
-    <!-- minus icon -->
-    <svg
-      v-if="icon === 'minus' && state !== 'loading'"
-      xmlns="http://www.w3.org/2000/svg"
-      class="icon relative mx-1 inline h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-      stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-
-    <span v-if="state !== 'loading'">
-      {{ text }}
+    <span v-if="state === 'loading'">
+      {{ $t('Loading…') }}
     </span>
 
-    <!-- arrow icon -->
-    <svg
-      v-if="icon === 'arrow' && state !== 'loading'"
-      xmlns="http://www.w3.org/2000/svg"
-      class="icon relative mx-1 inline h-5 w-5"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
-    </svg>
+    <template v-else>
+      <PlusIcon v-if="icon === 'plus'" />
+
+      <CheckedIcon v-else-if="icon === 'check'" />
+
+      <MinusIcon v-else-if="icon === 'minus'" />
+
+      <Trash2 class="icon relative me-1 inline h-5 w-5" v-else-if="icon === 'trash'" />
+
+      <span>
+        {{ text }}
+      </span>
+
+      <ArrowIcon :type="'right'" :size="'big'" v-if="icon === 'arrow'" />
+    </template>
   </button>
 </template>
-
-<script>
-export default {
-  props: {
-    text: {
-      type: String,
-      default: '',
-    },
-    icon: {
-      type: String,
-      default: '',
-    },
-    state: {
-      type: String,
-      default: '',
-    },
-  },
-};
-</script>
 
 <style lang="scss" scoped>
 .icon {
@@ -93,7 +57,8 @@ button {
   --tw-shadow: 2px 2px 0 #191a1b !important;
   border-radius: 0.25rem !important;
   border-width: 1px !important;
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 transparent), var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow) !important;
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 transparent), var(--tw-ring-shadow, 0 0 transparent), var(--tw-shadow) !important;
   display: inline-block !important;
   position: relative !important;
   text-decoration: none !important;

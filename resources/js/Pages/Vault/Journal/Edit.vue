@@ -1,7 +1,7 @@
 <script setup>
-import { onMounted, nextTick, ref } from 'vue';
+import { onMounted, nextTick, useTemplateRef } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
-import Layout from '@/Shared/Layout.vue';
+import Layout from '@/Layouts/Layout.vue';
 import PrettyLink from '@/Shared/Form/PrettyLink.vue';
 import PrettyButton from '@/Shared/Form/PrettyButton.vue';
 import TextInput from '@/Shared/Form/TextInput.vue';
@@ -18,7 +18,7 @@ const form = useForm({
   description: props.data.description,
 });
 
-const nameField = ref(null);
+const nameField = useTemplateRef('nameField');
 
 onMounted(() => {
   nextTick().then(() => nameField.value.focus());

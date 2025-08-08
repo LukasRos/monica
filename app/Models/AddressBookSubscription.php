@@ -30,7 +30,7 @@ class AddressBookSubscription extends Model implements Loggable
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int,string>
+     * @var list<string>
      */
     protected $fillable = [
         'user_id',
@@ -46,13 +46,6 @@ class AddressBookSubscription extends Model implements Loggable
         'last_synchronized_at',
         'active',
     ];
-
-    /**
-     * The attributes that aren't mass assignable.
-     *
-     * @var array<string>|bool
-     */
-    protected $guarded = ['id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -71,7 +64,7 @@ class AddressBookSubscription extends Model implements Loggable
     /**
      * Eager load account with every contact.
      *
-     * @var array<int,string>
+     * @var list<string>
      */
     protected $with = [
         'user',
@@ -79,6 +72,8 @@ class AddressBookSubscription extends Model implements Loggable
 
     /**
      * Get the account record associated with the subscription.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Account, $this>
      */
     public function account(): BelongsTo
     {
@@ -87,6 +82,8 @@ class AddressBookSubscription extends Model implements Loggable
 
     /**
      * Get the user record associated with the subscription.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\User, $this>
      */
     public function user(): BelongsTo
     {
@@ -95,6 +92,8 @@ class AddressBookSubscription extends Model implements Loggable
 
     /**
      * Get the vault record associated with the subscription.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\Vault, $this>
      */
     public function vault(): BelongsTo
     {
@@ -103,6 +102,8 @@ class AddressBookSubscription extends Model implements Loggable
 
     /**
      * Get the local synctoken.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo<\App\Models\SyncToken, $this>
      */
     public function localSyncToken(): BelongsTo
     {
@@ -111,6 +112,8 @@ class AddressBookSubscription extends Model implements Loggable
 
     /**
      * Get the subscription's logs.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany<\App\Models\Log, $this>
      */
     public function logs(): MorphMany
     {

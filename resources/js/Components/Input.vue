@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, onMounted, ref } from 'vue';
+import { nextTick, onMounted, useTemplateRef } from 'vue';
 
 defineProps({
   modelValue: String,
@@ -7,7 +7,7 @@ defineProps({
 
 defineEmits(['update:modelValue']);
 
-const input = ref(null);
+const input = useTemplateRef('input');
 const focus = () => nextTick().then(() => input.value.focus());
 
 onMounted(() => {
@@ -22,7 +22,7 @@ defineExpose({ focus: focus });
 <template>
   <input
     ref="input"
-    class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 dark:border-gray-600 dark:bg-gray-900 dark:shadow-gray-700 focus:dark:border-indigo-700"
+    class="rounded-md border-gray-300 shadow-xs focus:border-indigo-300 focus:ring-3 focus:ring-indigo-200/50 dark:border-gray-600 dark:bg-gray-900 dark:shadow-gray-700 dark:focus:border-indigo-700"
     :value="modelValue"
     @input="$emit('update:modelValue', $event.target.value)" />
 </template>
